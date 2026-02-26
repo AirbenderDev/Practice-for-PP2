@@ -289,7 +289,7 @@ class PrimeNums:
 
     def Prime(self):
         for i in range(2, pow(i, i)+1 <= self.x):
-            if x % i:
+            if self.x % i:
                 break
             else:
                 prime.append(self.x)
@@ -300,11 +300,7 @@ prime_input = input().split
 for d in prime_input:
     a = int(d)
     smth = PrimeNums(a)
-    smth.Prime
-
-for d in prime:
-    print(int(d), end=" ")
-
+    smth.Prime()
 
 if prime:
     for d in prime:
