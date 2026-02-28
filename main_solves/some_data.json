@@ -1,0 +1,11 @@
+{
+    "name": "Altai",
+    "age": 17,
+    "Speciaize": "Student",
+    "Salary": 0,
+    "Expirience": 0,
+    "Stack": {
+        "ppp": "Python backend",
+        "ttt": "lll"
+    }
+}
