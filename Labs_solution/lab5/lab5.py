@@ -1,6 +1,6 @@
+import re
 # 1 example
 
-import re
 s1 = str(input())
 
 print("Yes" if s1[0:5] == "Hello" else "No")

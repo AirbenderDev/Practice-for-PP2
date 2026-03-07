@@ -19,7 +19,7 @@ print(re.findall(r"[A-Z][a-z]+", s))
 
 # 5 ex
 s = input()
-print(bool(re.fullmatch(r"a.*b", s)))
+print(bool(re.fullmatch(r"a.*b$", s)))
 
 # 6 ex
 s = input()
