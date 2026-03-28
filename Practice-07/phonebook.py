@@ -48,7 +48,6 @@ def update_contact():
     conn.commit()
     cur.close()
     conn.close()
-    print("✅ Updated")
 
 
 def delete_contact():
@@ -136,7 +135,6 @@ def menu():
                 print("Bye!")
                 break
             case _:
-                print("❌ Invalid choice")
                 continue
 
 
