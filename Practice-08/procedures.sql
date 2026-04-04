@@ -1,32 +1,27 @@
-CREATE OR REPLACE PROCEDURE upsert_user(p_name VARCHAR, p_phone VARCHAR)
+
+CREATE TABLE IF NOT EXISTS contacts (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE,
+    phone TEXT
+);
+
+CREATE OR REPLACE PROCEDURE insert_user(p_name TEXT, p_phone TEXT)
 LANGUAGE plpgsql AS $$
 BEGIN
-    IF EXISTS (SELECT 1 FROM contacts WHERE name = p_name) THEN
-        UPDATE contacts SET phone = p_phone WHERE name = p_name;
-    ELSE
-        INSERT INTO contacts(name, phone) VALUES (p_name, p_phone);
-    END IF;
+    INSERT INTO contacts(name, phone) VALUES (p_name, p_phone);
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE insert_many(names text[], phones text[])
+CREATE OR REPLACE PROCEDURE update_user(p_name TEXT, p_phone TEXT)
 LANGUAGE plpgsql AS $$
-DECLARE
-    i int := 1;
 BEGIN
-    WHILE i <= array_length(names, 1) LOOP
-        IF phones[i] ~ '^[0-9]+$' THEN
-            CALL upsert_user(names[i], phones[i]);
-        END IF;
-        i := i + 1;
-    END LOOP;
+    UPDATE contacts SET phone = p_phone WHERE name = p_name;
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE delete_user(p text)
+CREATE OR REPLACE PROCEDURE delete_user(p TEXT)
 LANGUAGE plpgsql AS $$
 BEGIN
-    DELETE FROM contacts
-    WHERE name = p OR phone = p;
+    DELETE FROM contacts WHERE name = p OR phone = p;
 END;
 $$;

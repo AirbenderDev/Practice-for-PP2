@@ -1,80 +1,31 @@
-from config import LIMIT, OFFSET
 from connect import get_conn
-
-
-def create_table():
-    conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS contacts (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(50) UNIQUE,
-            phone VARCHAR(20)
-        )
-    """)
-    conn.commit()
-    cur.close()
-    conn.close()
-
-
-def add_or_update():
-    name = input("Name: ")
-    phone = input("Phone: ")
-
-    conn = get_conn()
-    cur = conn.cursor()
-
-    cur.execute("CALL upsert_contact(%s, %s)", (name, phone))
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-
-def search():
-    p = input()
-    conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM search_contacts(%s)", (p,))
-    print(cur.fetchall())
-    cur.close()
-    conn.close()
+from config import LIMIT, OFFSET
 
 
 def add():
-    name = input()
-    phone = input()
+    name = input("name: ")
+    phone = input("phone: ")
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("CALL upsert_user(%s, %s)", (name, phone))
+    cur.execute("CALL insert_user(%s, %s)", (name, phone))
     conn.commit()
     cur.close()
     conn.close()
 
 
-def add_many():
-    names = input().split()
-    phones = input().split()
+def update():
+    name = input("name: ")
+    phone = input("phone: ")
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("CALL insert_many(%s, %s)", (names, phones))
+    cur.execute("CALL update_user(%s, %s)", (name, phone))
     conn.commit()
-    cur.close()
-    conn.close()
-
-
-def get_page():
-    conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM get_contacts_paginated(%s, %s)",
-                (LIMIT, OFFSET))
-    print(cur.fetchall())
     cur.close()
     conn.close()
 
 
 def delete():
-    p = input()
+    p = input("name or phone: ")
     conn = get_conn()
     cur = conn.cursor()
     cur.execute("CALL delete_user(%s)", (p,))
@@ -84,55 +35,35 @@ def delete():
 
 
 def search():
-    pattern = input("Search: ")
-
+    p = input("search: ")
     conn = get_conn()
     cur = conn.cursor()
-
-    cur.execute("SELECT * FROM get_contacts_by_pattern(%s)", (pattern,))
+    cur.execute("SELECT * FROM search_contacts(%s)", (p,))
     rows = cur.fetchall()
-
-    for row in rows:
-        print(row)
-
-    cur.close()
-    conn.close()
-
-
-def delete():
-    name = input("Delete name: ")
-
-    conn = get_conn()
-    cur = conn.cursor()
-
-    cur.execute("CALL delete_contact(%s)", (name,))
-
-    conn.commit()
+    for r in rows:
+        print(r)
     cur.close()
     conn.close()
 
 
 def menu():
-    create_table()
-
     while True:
-        print("\n1. Add/Update")
-        print("2. Search")
-        print("3. Delete")
-        print("4. Exit")
-
-        choice = input("Choose: ")
-
-        if choice == "1":
-            add_or_update()
-        elif choice == "2":
-            search()
-        elif choice == "3":
+        print("\n1 add")
+        print("2 update")
+        print("3 delete")
+        print("4 search")
+        print("0 exit")
+        c = input(">> ")
+        if c == "1":
+            add()
+        elif c == "2":
+            update()
+        elif c == "3":
             delete()
-        elif choice == "4":
+        elif c == "4":
+            search()
+        elif c == "0":
             break
-        else:
-            print("Invalid choice")
 
 
 if __name__ == "__main__":
