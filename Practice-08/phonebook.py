@@ -1,3 +1,4 @@
+from config import LIMIT, OFFSET
 from connect import get_conn
 
 
@@ -25,6 +26,58 @@ def add_or_update():
 
     cur.execute("CALL upsert_contact(%s, %s)", (name, phone))
 
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+def search():
+    p = input()
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM search_contacts(%s)", (p,))
+    print(cur.fetchall())
+    cur.close()
+    conn.close()
+
+
+def add():
+    name = input()
+    phone = input()
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("CALL upsert_user(%s, %s)", (name, phone))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+def add_many():
+    names = input().split()
+    phones = input().split()
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("CALL insert_many(%s, %s)", (names, phones))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+def get_page():
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM get_contacts_paginated(%s, %s)",
+                (LIMIT, OFFSET))
+    print(cur.fetchall())
+    cur.close()
+    conn.close()
+
+
+def delete():
+    p = input()
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("CALL delete_user(%s)", (p,))
     conn.commit()
     cur.close()
     conn.close()
