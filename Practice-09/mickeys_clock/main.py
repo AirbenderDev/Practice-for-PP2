@@ -6,11 +6,11 @@ WIDTH, HEIGHT = 800, 600
 center = (WIDTH//2, HEIGHT//2)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 main = pygame.image.load(
-    "images/clock.png")
+    "resources/clock.png")
 left = pygame.image.load(
-    "images/sec_hand.png")
+    "resources/min_hand.png")
 right = pygame.image.load(
-    "images/min_hand.png")
+    "resources/sec_hand.png")
 running = True
 x = time_angle()
 clock = pygame.time.Clock()
